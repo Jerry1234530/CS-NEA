@@ -7,7 +7,7 @@ from pytmx.util_pygame import load_pygame
 #---------INITIALISATION---------#
 pygame.init() 
 screen = pygame.display.set_mode((SCREEN_HEIGHT,SCREEN_WIDTH))
-tmx_data = load_pygame('../Assets/untitled.tmx')
+tmx_data = load_pygame('./Assets/tmx/untitled.tmx')
 print(tmx_data)
 clock = pygame.time.Clock() 
 

@@ -1,0 +1,105 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "untitled.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Basic_Furniture.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Basic_Grass_Biom_things.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Chest.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Doors.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
+        "Fences.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
+        "Grass.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 5.5
+        },
+        "Hills.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 5.5
+        },
+        "Paths.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Tilled_Dirt.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
+        "Water.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Wooden_House_Roof_Tilset.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 4
+        },
+        "Wooden_House_Walls_Tilset.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 5.5
+        },
+        "untitled.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 441.66666666666663,
+                "y": 496.99999999999994
+            }
+        }
+    },
+    "last.externalTilesetPath": "C:/Users/Jared/Documents/Tiled Map",
+    "last.imagePath": "C:/Users/Jared/Documents/Assets/Objects",
+    "map.height": 64,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 64,
+    "openFiles": [
+        "Grass.tsx",
+        "Hills.tsx",
+        "Wooden_House_Roof_Tilset.tsx",
+        "untitled.tmx",
+        "Chest.tsx",
+        "Basic_Grass_Biom_things.tsx",
+        "Paths.tsx"
+    ],
+    "project": "untitled.tiled-project",
+    "recentFiles": [
+        "Grass.tsx",
+        "Hills.tsx",
+        "Wooden_House_Roof_Tilset.tsx",
+        "Paths.tsx",
+        "Basic_Grass_Biom_things.tsx",
+        "Chest.tsx",
+        "untitled.tmx",
+        "Basic_Furniture.tsx",
+        "Tilled_Dirt.tsx",
+        "Doors.tsx",
+        "Wooden_House_Walls_Tilset.tsx",
+        "Fences.tsx"
+    ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
