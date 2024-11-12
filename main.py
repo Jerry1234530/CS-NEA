@@ -1,21 +1,24 @@
 
 #---------IMPORTS---------# 
-import pygame, sys , os
-from settings import * # Imports the variables from settings
+import pygame , sys 
+from settings import * 
+from level import Level 
 
-
-#---------INITIALISATION---------#
-pygame.init() 
-screen = pygame.display.set_mode((SCREEN_HEIGHT,SCREEN_WIDTH))
-clock = pygame.time.Clock() 
-
-#---------Main Game Loop----------#
-run = True
-while run: 
-    for event in pygame.event.get(): 
-        if event.type == pygame.QUIT: 
-            pygame.quit() 
-            sys.exit()
-    screen.fill("BLACK") 
-    pygame.display.update() 
-    clock.tick(60)  # Forces a game update to happen 60 times a second. This could cause the game to break if set to a higher refresh rate as more updates are being done.
+class Game: 
+    def __init__(self): 
+        pygame.init() 
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH , SCREEN_HEIGHT))
+        pygame.display.set_caption('NEA Farming Game')
+        self.clock = pygame.time.Clock() 
+        self.level = Level() 
+    
+    def run(self): 
+        while True: 
+            for event in pygame.event.get(): 
+                if event.type == pygame.QUIT: 
+                    pygame.quit() 
+                    sys.exit() 
+            
+            dt = self.clock.tick() / 1000 
+            self.level.run(dt) 
+            pygame.display.update() 
