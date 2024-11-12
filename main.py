@@ -2,19 +2,12 @@
 #---------IMPORTS---------# 
 import pygame, sys , os
 from settings import * # Imports the variables from settings
-from pytmx.util_pygame import load_pygame
-
-
 
 
 #---------INITIALISATION---------#
 pygame.init() 
 screen = pygame.display.set_mode((SCREEN_HEIGHT,SCREEN_WIDTH))
-tmx_data = load_pygame('./Assets/tmx/untitled.tmx')
-
-print(dir(tmx_data))
 clock = pygame.time.Clock() 
-
 
 #---------Main Game Loop----------#
 run = True
