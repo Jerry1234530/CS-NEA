@@ -18,13 +18,7 @@ class Level:
     def run(self, dt): 
         self.display_surface.fill(BLACK) 
         self.all_sprites.draw(self.display_surface)
-        print('DEBUG: The Pygame Window is currently running')
 
-    def draw_map(self):
-        for layer in self.tmx_data.visible_layers:
-            if isinstance(layer, pytmx.TiledTileLayer):  # Only process tile layers
-                for x, y, gid in layer:  # Iterate through tiles
-                    if gid != 0:  # Skip empty tiles (gid == 0)
-                        tile = self.tmx_data.get_tile_image_by_gid(gid)
-                        if tile:  # Check if the tile is valid
-                            self.screen.blit(tile, (x * self.tmx_data.tilewidth, y * self.tmx_data.tileheight))    
+print('DEBUG: The Pygame Window is currently running')
+
+ 

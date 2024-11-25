@@ -1,9 +1,10 @@
 import pygame
 import sys
 from settings import *
-from level import Level
+from tile import TiledMap
 import pytmx
 from pytmx import load_pygame
+from level import Level
 
 class Game:
     def __init__(self):
@@ -12,12 +13,14 @@ class Game:
         pygame.display.set_caption('Farming NEA Project')
         self.clock = pygame.time.Clock()
         self.tmx_data = load_pygame('./Assets/tmx/untitled.tmx')  # Ensure the path is correct
-        self.level = Level()
+        self.level = Level() 
+        self.all_sprites = pygame.sprite.Sprite() 
+        self.tile = TiledMap((1,1), self.screen, self.all_sprites) 
 
     def run(self):
         """
         Main game loop.
-        """
+        """ 
         while True:
             # Handle events
             for event in pygame.event.get():
@@ -27,9 +30,7 @@ class Game:
 
             # Clear the screen
             self.screen.fill((0, 0, 0))
-
-            # Draw the map
-            self.level.draw_map()
+            self.tile.draw(self.all_sprites) 
 
             # Run game level logic
             deltatime = self.clock.tick(60) / 1000  # Cap frame rate to 60 FPS
