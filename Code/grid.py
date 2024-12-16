@@ -1,6 +1,6 @@
 from settings import *  # Assuming the constants (TILE_ROWS, TILE_COLS, etc.) are in the settings file.
 import pygame
-
+from upgrades import Upgrades
 class Tile:
     def __init__(self, x, y, width, height, row, col):
         self.rect = pygame.Rect(x, y, width, height)
@@ -15,8 +15,8 @@ class Tile:
     def __str__(self):
         # Return the string representation of the tile's relative position (row, col)
         crop_info = f"Crop: {self.crop if self.crop else 'None'}"
-        progress_info = f"Progress: {50 if self.crop else 0}%"
-        value_info = f"Value: £20"  # Assuming a fixed value for now
+        progress_info = f"Progress: {self.progress}"
+        value_info = f"Value: {self.value}"  # Assuming a fixed value for now
         position_info = f"Position: ({self.row + 1}, {self.col + 1})"  # 1-based indexing
         return f"Tile {position_info} - {crop_info}, {progress_info}, {value_info}"
 
@@ -32,7 +32,7 @@ class Tile:
     
     def update(self):
         if self.crop is not None:  # Only progress if there is a crop
-            self.progress += 0.05  # Increment progress
+            self.progress += 0.1  # Increment progress
 
             if self.progress >= 100:
                 self.progress = 100  # Cap the progress at 100% but don't reset crop

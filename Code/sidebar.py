@@ -13,7 +13,7 @@ class Sidebar:
     def update(self, selected_tile): 
         self.selected_tile = selected_tile 
     
-    def draw(self): 
+    def draw(self ,time_to_next_rent, money ): 
         pygame.draw.rect(self.screen, BLACK, (*self.pos, self.width, self.height))
 
         if self.selected_tile: 
@@ -28,6 +28,14 @@ class Sidebar:
                 text_surface = self.font.render(line, True, WHITE) 
                 self.screen.blit(text_surface, (self.pos[0] + 10, self.pos[1] + 10 + i * 30))
             
+
+            #Display Rent Timer
+            if money <200: 
+                rent_text = self.font.render(f"Rent Timer: {time_to_next_rent}s ", True, RED)
+                self.screen.blit(rent_text, (self.pos[0] + 10, self.pos[1] + 125))
+            else:
+                rent_text = self.font.render(f"Rent Timer: {time_to_next_rent}s ", True, GREEN)
+                self.screen.blit(rent_text, (self.pos[0] + 10, self.pos[1] + 125))
             # Draw the sell button
             sell_button_rect = pygame.Rect(self.pos[0] + 10 , self.pos[1] + 150, 100, 40) 
             pygame.draw.rect(self.screen, (150, 0, 0), sell_button_rect) 
@@ -40,7 +48,17 @@ class Sidebar:
             plant_text = self.font.render("Plant Wheat (£5)", True, WHITE) 
             self.screen.blit(plant_text, (plant_button_rect.x + 10, plant_button_rect.y + 10))
 
-            #Draw the 
+            #Draw the Plant Cotton Button
+            cotton_button_rect = pygame.Rect(self.pos[0] + 10 , self.pos[1] + 250 , 250 , 40)
+            pygame.draw.rect(self.screen, (0, 150, 0), cotton_button_rect) 
+            cotton_text = self.font.render("Plant Cotton (£10)", True, WHITE)
+            self.screen.blit(cotton_text, (cotton_button_rect.x + 10, cotton_button_rect.y + 10))
+            #Draw the Plant Oat Button
+            oat_button_rect = pygame.Rect(self.pos[0] + 10 , self.pos[1] + 300, 250, 40)
+            pygame.draw.rect(self.screen, (0, 150, 0), oat_button_rect) 
+            oat_text = self.font.render("Plant Oat (£15)", True, WHITE)
+            self.screen.blit(oat_text, (oat_button_rect.x + 10, oat_button_rect.y + 10))
+
 
 
 
@@ -55,3 +73,10 @@ class Sidebar:
         plant_button_rect = pygame.Rect(self.pos[0] + 10 , self.pos[1] + 200, 250, 40) 
         return plant_button_rect.collidepoint(mouse_pos)  # Check if mouse is over the plant button 
 
+    def check_cotton_pant_button(self, mouse_pos): 
+        plant_button_rect = pygame.Rect(self.pos[0] + 10, self.pos[1] + 250 , 250 , 40) 
+        return plant_button_rect.collidepoint(mouse_pos)  # Check if mouse is over the plant button
+    
+    def check_oat_plant_button(self, mouse_pos):
+        plant_button_rect = pygame.Rect(self.pos[0] + 10, self.pos[1] + 300, 250, 40)
+        return plant_button_rect.collidepoint(mouse_pos)  # Check if mouse is over the plant button

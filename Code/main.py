@@ -6,6 +6,7 @@ from button import Button
 from grid import Grid
 from grid import Tile
 from sidebar import Sidebar
+from upgrades import Upgrades
 #---------IMPORTS---------#
 
 
@@ -66,8 +67,22 @@ class Game:
         print ("Loaded Grid")
         sidebar = Sidebar(self.screen)
         print ("Loaded Sidebar")
-        self.selected_tile = None  # Reset the selected tile when the game starts        # Main game loop
+        self.selected_tile = None  # Reset the selected tile when the game starts        
+        pygame.mixer.init() 
+        upg = Upgrades() 
+        rent_interval = 300000
+        last_rent_time = pygame.time.get_ticks() 
         while True:
+            current_time = pygame.time.get_ticks()
+            time_to_next_rent = max(0, (last_rent_time + rent_interval - current_time)) / 1000
+
+            if current_time - last_rent_time >= rent_interval:
+                if self.money >= 200: 
+                    self.money -= 200 
+                    print(f"Rent Charged: £200.")
+                else: 
+                    print(f"Not enough money to rent. You Lose") 
+                    self.main_menu() 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -91,26 +106,46 @@ class Game:
                     if sidebar.check_sell_button(mouse_pos):
                         if self.selected_tile:
                             print(f"Sold crop from Tile {self.selected_tile}")
-                            self.money += 20 
+                            self.money += self.selected_tile.value 
                             self.selected_tile.progress = 0
                             self.selected_tile.crop = None  # Remove the crop from the selected tile
+                            self.selected_tile.value = 0 
                             sidebar.update(self.selected_tile)  # Update the sidebar to reflect no selection
 
                     if sidebar.check_plant_button(mouse_pos): 
-                        if self.selected_tile and self.money >= 5: 
+                        if self.selected_tile and self.money >= 5 and self.selected_tile.crop is None: 
                             print(f"DEBUG: Planted crop on Tile {self.selected_tile}")
-                            print("DEBUG: Took £5 from balance") 
                             self.money -= 5  # Decrease the player's balance
                             self.selected_tile.crop = "Wheat"   # Place a crop on the selected tile
                             self.selected_tile.value = 20 
                             sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
                         else: 
-                            print("Not enough money to plant a crop") 
+                            print("Not enough money to plant a crop OR crop already exists") 
+                    if sidebar.check_cotton_pant_button(mouse_pos): 
+                        if self.selected_tile and self.money >= 10 and self.selected_tile.crop is None: 
+                            print(f"DEBUG: Planted crop on Tile {self.selected_tile}")
+                            print("DEBUG: Took £10 from balance") 
+                            self.money -= 10  # Decrease the player's balance
+                            self.selected_tile.crop = "Cotton Pant"   # Place a crop on the selected tile
+                            self.selected_tile.value = 30 
+                            sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
+                        else: 
+                            print("Not enough money to plant a crop OR crop already exists")
+                    if sidebar.check_oat_plant_button(mouse_pos): 
+                        if self.selected_tile and self.money >= 15 and self.selected_tile.crop is None: 
+                            print(f"DEBUG: Planted crop on Tile {self.selected_tile}")
+                            self.money -= 15  # Decrease the player's balance
+                            self.selected_tile.crop = "Oat Plant"   # Place a crop on the selected tile
+                            self.selected_tile.value = 40 
+                            sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
+                        else: 
+                            print("Not enough money to plant a crop OR crop already exists")
+                        
 
             # Clear the screen and draw the grid, sidebar, and selected tile
             self.screen.fill(WHITE)
             grid.draw()  # Draw the grid with tiles
-            sidebar.draw()  # Draw the sidebar with the selected tile info
+            sidebar.draw(time_to_next_rent , self.money)  # Draw the sidebar with the selected tile info
             money_text = self.font.render(f"Money: £{self.money}", True, GREEN)
             pygame.display.set_caption(f"Money: {self.money} Farming Game ")
             self.screen.blit(money_text, (980, 670))  # Display the player's money on the screen

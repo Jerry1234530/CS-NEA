@@ -18,4 +18,7 @@ class Upgrades:
         else: 
             print("Value upgrade limit reached!") 
             return False
+    
+    def get_upgrade_value(self): 
+        return self.upgrade_value
         
