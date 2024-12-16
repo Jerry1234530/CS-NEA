@@ -1,44 +1,124 @@
+#---------IMPORTS---------#
 import pygame
 import sys
 from settings import *
-from tile import TiledMap
-import pytmx
-from pytmx import load_pygame
-from level import Level
+from button import Button
+from grid import Grid
+from grid import Tile
+from sidebar import Sidebar
+#---------IMPORTS---------#
 
+
+#---------Game Class---------#
 class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption('Farming NEA Project')
         self.clock = pygame.time.Clock()
-        self.tmx_data = load_pygame('./Assets/tmx/untitled.tmx')  # Ensure the path is correct
-        self.level = Level() 
-        self.all_sprites = pygame.sprite.Sprite() 
-        self.tile = TiledMap((1,1), self.screen, self.all_sprites) 
+        self.font = pygame.font.SysFont('arial', 36)
+        self.BG = pygame.image.load('./Assets/background.png')
+        self.selected_tile = None  # Track the selected tile
+        self.money = 5 # Set the money 
 
-    def run(self):
-        """
-        Main game loop.
-        """ 
+    def main_menu(self):
+        pygame.display.set_caption("Main Menu : Farming Game")
         while True:
-            # Handle events
+            self.screen.blit(self.BG, (0, 0))
+            MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+            MENU_TEXT = self.font.render("MAIN MENU", True, GREEN)
+            MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+
+            PLAY_BUTTON = Button(image=pygame.image.load("./Assets/Play Rect.png"), pos=(640, 250),
+                                 text_input='PLAY', font=self.font, base_color=ORANGE, hovering_color='WHITE')
+            OPTIONS_BUTTON = Button(image=pygame.image.load("./Assets/Options Rect.png"), pos=(640, 400),
+                                    text_input='OPTIONS', font=self.font, base_color=ORANGE, hovering_color='WHITE')
+            QUIT_BUTTON = Button(image=pygame.image.load("./Assets/Quit Rect.png"), pos=(640, 550),
+                                 text_input='QUIT', font=self.font, base_color=ORANGE, hovering_color='WHITE')
+
+            self.screen.blit(MENU_TEXT, MENU_RECT)
+
+            for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
+                button.changeColor(MENU_MOUSE_POS)
+                button.update(self.screen)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
-            # Clear the screen
-            self.screen.fill((0, 0, 0))
-            self.tile.draw(self.all_sprites) 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if PLAY_BUTTON.CheckForInput(MENU_MOUSE_POS):
+                        self.play()
+                        print("DEBUG: PLAY")
+                    if OPTIONS_BUTTON.CheckForInput(MENU_MOUSE_POS):
+                        self.options()
+                    if QUIT_BUTTON.CheckForInput(MENU_MOUSE_POS):
+                        pygame.quit()
+                        sys.exit()
 
-            # Run game level logic
-            deltatime = self.clock.tick(60) / 1000  # Cap frame rate to 60 FPS
-            self.level.run(deltatime)
+            pygame.display.update()
 
-            # Update the display
-            pygame.display.flip()
+    def play(self):
+        # Initialize the grid and sidebar
+        grid = Grid(self.screen)
+        print ("Loaded Grid")
+        sidebar = Sidebar(self.screen)
+        print ("Loaded Sidebar")
+        self.selected_tile = None  # Reset the selected tile when the game starts        # Main game loop
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    
+                    # Handle tile selection
+                    clicked_tile = grid.get_tile_at_pos(mouse_pos)
+                    if clicked_tile:
+                        if self.selected_tile:
+                            self.selected_tile.selected = False  # Deselect the previous tile
+                        clicked_tile.selected = True  # Select the new tile
+                        self.selected_tile = clicked_tile # Update the selected tile
+
+                        # Update sidebar based on the selected tile
+                        sidebar.update(self.selected_tile)
+
+                    # Handle sell button in sidebar
+                    if sidebar.check_sell_button(mouse_pos):
+                        if self.selected_tile:
+                            print(f"Sold crop from Tile {self.selected_tile}")
+                            self.money += 20 
+                            self.selected_tile.progress = 0
+                            self.selected_tile.crop = None  # Remove the crop from the selected tile
+                            sidebar.update(self.selected_tile)  # Update the sidebar to reflect no selection
+
+                    if sidebar.check_plant_button(mouse_pos): 
+                        if self.selected_tile and self.money >= 5: 
+                            print(f"DEBUG: Planted crop on Tile {self.selected_tile}")
+                            print("DEBUG: Took £5 from balance") 
+                            self.money -= 5  # Decrease the player's balance
+                            self.selected_tile.crop = "Wheat"   # Place a crop on the selected tile
+                            self.selected_tile.value = 20 
+                            sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
+                        else: 
+                            print("Not enough money to plant a crop") 
+
+            # Clear the screen and draw the grid, sidebar, and selected tile
+            self.screen.fill(WHITE)
+            grid.draw()  # Draw the grid with tiles
+            sidebar.draw()  # Draw the sidebar with the selected tile info
+            money_text = self.font.render(f"Money: £{self.money}", True, GREEN)
+            pygame.display.set_caption(f"Money: {self.money} Farming Game ")
+            self.screen.blit(money_text, (980, 670))  # Display the player's money on the screen
+            grid.update() 
+            pygame.display.flip()  # Update the display
+            self.clock.tick(60)  # Limit the frame rate to 60 FPS
+
 
 if __name__ == '__main__':
     game = Game()
-    game.run()
+    game.main_menu()
