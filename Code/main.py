@@ -54,7 +54,7 @@ class Game:
                         self.play()
                         print("DEBUG: PLAY")
                     if OPTIONS_BUTTON.CheckForInput(MENU_MOUSE_POS):
-                        self.options()
+                        self.options() 
                     if QUIT_BUTTON.CheckForInput(MENU_MOUSE_POS):
                         pygame.quit()
                         sys.exit()
@@ -70,19 +70,23 @@ class Game:
         self.selected_tile = None  # Reset the selected tile when the game starts        
         pygame.mixer.init() 
         upg = Upgrades() 
-        rent_interval = 300000
+        rent_interval = 100000
         last_rent_time = pygame.time.get_ticks() 
+        rent_cost = 200
         while True:
             current_time = pygame.time.get_ticks()
             time_to_next_rent = max(0, (last_rent_time + rent_interval - current_time)) / 1000
-
+            
             if current_time - last_rent_time >= rent_interval:
                 if self.money >= 200: 
-                    self.money -= 200 
-                    print(f"Rent Charged: £200.")
+                    self.money -= rent_cost 
+                    print(f"Rent Charged: {rent_cost}.")
+                    rent_cost += 100
+
                 else: 
                     print(f"Not enough money to rent. You Lose") 
-                    self.main_menu() 
+                    self.main_menu()
+                last_rent_time = current_time
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -145,14 +149,41 @@ class Game:
             # Clear the screen and draw the grid, sidebar, and selected tile
             self.screen.fill(WHITE)
             grid.draw()  # Draw the grid with tiles
-            sidebar.draw(time_to_next_rent , self.money)  # Draw the sidebar with the selected tile info
+            sidebar.draw(time_to_next_rent , self.money , rent_cost)  # Draw the sidebar with the selected tile info
             money_text = self.font.render(f"Money: £{self.money}", True, GREEN)
+            rent_text = self.font.render(f"Rent: £{rent_cost}", True, RED) 
             pygame.display.set_caption(f"Money: {self.money} Farming Game ")
             self.screen.blit(money_text, (980, 670))  # Display the player's money on the screen
             grid.update() 
             pygame.display.flip()  # Update the display
             self.clock.tick(60)  # Limit the frame rate to 60 FPS
+        
+    def options(self):
+    # Set up a timer to display the message
+        start_time = pygame.time.get_ticks()  # Get the current time in milliseconds
+        display_message = True
 
+        while display_message:
+            self.screen.fill(WHITE)  # Clear the screen
+            options_text = self.font.render("Options will be added soon", True, GREEN)
+            options_rect = options_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+            self.screen.blit(options_text, options_rect)
+
+            pygame.display.flip()  # Update the display
+
+            # Check if 3 seconds have passed
+            current_time = pygame.time.get_ticks()
+            if current_time - start_time > 3000:  # 3000 ms = 3 seconds
+                display_message = False
+
+            # Handle events to allow quitting or skipping
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+        # After the message, return to the main menu
+        self.main_menu()
 
 if __name__ == '__main__':
     game = Game()

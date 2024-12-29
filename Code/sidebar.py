@@ -13,7 +13,7 @@ class Sidebar:
     def update(self, selected_tile): 
         self.selected_tile = selected_tile 
     
-    def draw(self ,time_to_next_rent, money ): 
+    def draw(self ,time_to_next_rent, money , rent_cost ): 
         pygame.draw.rect(self.screen, BLACK, (*self.pos, self.width, self.height))
 
         if self.selected_tile: 
@@ -30,7 +30,7 @@ class Sidebar:
             
 
             #Display Rent Timer
-            if money <200: 
+            if money < rent_cost: 
                 rent_text = self.font.render(f"Rent Timer: {time_to_next_rent}s ", True, RED)
                 self.screen.blit(rent_text, (self.pos[0] + 10, self.pos[1] + 125))
             else:

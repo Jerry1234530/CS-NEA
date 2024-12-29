@@ -35,8 +35,7 @@ class Tile:
             self.progress += 0.1  # Increment progress
 
             if self.progress >= 100:
-                self.progress = 100  # Cap the progress at 100% but don't reset crop
-                # Optionally, you can add some other logic for when the crop is ready for harvest
+                self.progress = 100 
 
 
 
