@@ -92,6 +92,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
                     
@@ -130,7 +131,7 @@ class Game:
                             print(f"DEBUG: Planted crop on Tile {self.selected_tile}")
                             print("DEBUG: Took £10 from balance") 
                             self.money -= 10  # Decrease the player's balance
-                            self.selected_tile.crop = "Cotton Pant"   # Place a crop on the selected tile
+                            self.selected_tile.crop = "Cotton Plant"   # Place a crop on the selected tile
                             self.selected_tile.value = 30 
                             sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
                         else: 
@@ -144,6 +145,7 @@ class Game:
                             sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
                         else: 
                             print("Not enough money to plant a crop OR crop already exists")
+
                         
 
             # Clear the screen and draw the grid, sidebar, and selected tile
@@ -183,7 +185,10 @@ class Game:
                     sys.exit()
 
         # After the message, return to the main menu
-        self.main_menu()
+        self.main_menu()#
+    
+    def game_over(self): 
+        pass
 
 if __name__ == '__main__':
     game = Game()

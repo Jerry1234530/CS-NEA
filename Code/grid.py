@@ -23,8 +23,14 @@ class Tile:
     def draw(self, screen):
         if self.crop is None:
             pygame.draw.rect(screen, WHITE, self.rect)  # Empty tile
-        else:
-            pygame.draw.rect(screen, GREEN, self.rect)  # Tile with crop
+        elif self.crop == "Wheat" : 
+            pygame.draw.rect(screen, YELLOW, self.rect) 
+        elif self.crop == "Cotton Plant" : 
+            pygame.draw.rect(screen, ORANGE , self.rect)
+        elif self.crop == "Oat Plant" : 
+            pygame.draw.rect(screen, BROWN, self.rect)
+        else: 
+            pygame.draw.rect(screen, RED, self.rect)
         if self.selected:
             pygame.draw.rect(screen, BLUE, self.rect, 3)  # Highlight selected tile
         pygame.draw.rect(screen, GREEN, self.rect, 1)  # Tile border
