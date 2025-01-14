@@ -1,6 +1,5 @@
 from settings import *  # Assuming the constants (TILE_ROWS, TILE_COLS, etc.) are in the settings file.
 import pygame
-from upgrades import Upgrades
 class Tile:
     def __init__(self, x, y, width, height, row, col):
         self.rect = pygame.Rect(x, y, width, height)
@@ -38,7 +37,7 @@ class Tile:
     
     def update(self):
         if self.crop is not None:  # Only progress if there is a crop
-            self.progress += 0.1  # Increment progress
+            self.progress += 0.125  # Increment progress
 
             if self.progress >= 100:
                 self.progress = 100 

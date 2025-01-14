@@ -6,7 +6,6 @@ from button import Button
 from grid import Grid
 from grid import Tile
 from sidebar import Sidebar
-from upgrades import Upgrades
 #---------IMPORTS---------#
 
 
@@ -69,22 +68,23 @@ class Game:
         print ("Loaded Sidebar")
         self.selected_tile = None  # Reset the selected tile when the game starts        
         pygame.mixer.init() 
-        upg = Upgrades() 
         rent_interval = 100000
         last_rent_time = pygame.time.get_ticks() 
         rent_cost = 200
         while True:
             current_time = pygame.time.get_ticks()
             time_to_next_rent = max(0, (last_rent_time + rent_interval - current_time)) / 1000
-            
+
+
             if current_time - last_rent_time >= rent_interval:
-                if self.money >= 200: 
+                if self.money >= rent_cost: 
                     self.money -= rent_cost 
                     print(f"Rent Charged: {rent_cost}.")
                     rent_cost += 100
 
                 else: 
-                    print(f"Not enough money to rent. You Lose") 
+                    print(f"Not enough money to rent. You Lose!") 
+                    self.money = 5 
                     self.main_menu()
                 last_rent_time = current_time
             for event in pygame.event.get():
@@ -92,6 +92,24 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+                if event.type == pygame.KEYDOWN:
+                    if self.selected_tile:  # Check if a tile is selected
+                        row, col = self.selected_tile.row, self.selected_tile.col
+                        if event.key == pygame.K_UP and row > 0:
+                            self.selected_tile.selected = False
+                            self.selected_tile = grid.tiles[(row - 1) * TILE_COLS + col]
+                        elif event.key == pygame.K_DOWN and row < TILE_ROWS - 1:
+                            self.selected_tile.selected = False
+                            self.selected_tile = grid.tiles[(row + 1) * TILE_COLS + col]
+                        elif event.key == pygame.K_LEFT and col > 0:
+                            self.selected_tile.selected = False
+                            self.selected_tile = grid.tiles[row * TILE_COLS + (col - 1)]
+                        elif event.key == pygame.K_RIGHT and col < TILE_COLS - 1:
+                            self.selected_tile.selected = False
+                            self.selected_tile = grid.tiles[row * TILE_COLS + (col + 1)]
+
+                        self.selected_tile.selected = True
+                        sidebar.update(self.selected_tile)  # Update the sidebar
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
