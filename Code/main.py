@@ -20,6 +20,7 @@ class Game:
         self.BG = pygame.image.load('./Assets/background.png')
         self.selected_tile = None  # Track the selected tile
         self.money = 5 # Set the money 
+        self.rent_enabled = True #Default: True. 
 
     def main_menu(self):
         pygame.display.set_caption("Main Menu : Farming Game")
@@ -70,13 +71,13 @@ class Game:
         pygame.mixer.init() 
         rent_interval = 100000
         last_rent_time = pygame.time.get_ticks() 
-        rent_cost = 200
+        rent_cost = 100
         while True:
             current_time = pygame.time.get_ticks()
             time_to_next_rent = max(0, (last_rent_time + rent_interval - current_time)) / 1000
 
 
-            if current_time - last_rent_time >= rent_interval:
+            if current_time - last_rent_time >= rent_interval and self.rent_enabled: #Checks if rent is enabled and that the rent is due.
                 if self.money >= rent_cost: 
                     self.money -= rent_cost 
                     print(f"Rent Charged: {rent_cost}.")
@@ -85,7 +86,7 @@ class Game:
                 else: 
                     print(f"Not enough money to rent. You Lose!") 
                     self.money = 5 
-                    self.main_menu()
+                    self.game_over() 
                 last_rent_time = current_time
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -128,7 +129,7 @@ class Game:
                     # Handle sell button in sidebar
                     if sidebar.check_sell_button(mouse_pos):
                         if self.selected_tile:
-                            print(f"Sold crop from Tile {self.selected_tile}")
+                            print(f"DEBUG: Sold crop from {self.selected_tile}")
                             self.money += self.selected_tile.value 
                             self.selected_tile.progress = 0
                             self.selected_tile.crop = None  # Remove the crop from the selected tile
@@ -143,7 +144,7 @@ class Game:
                             self.selected_tile.value = 20 
                             sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
                         else: 
-                            print("Not enough money to plant a crop OR crop already exists") 
+                            print("DEBUG: Not enough money to plant a crop OR crop already exists") 
                     if sidebar.check_cotton_pant_button(mouse_pos): 
                         if self.selected_tile and self.money >= 10 and self.selected_tile.crop is None: 
                             print(f"DEBUG: Planted crop on Tile {self.selected_tile}")
@@ -153,7 +154,7 @@ class Game:
                             self.selected_tile.value = 30 
                             sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
                         else: 
-                            print("Not enough money to plant a crop OR crop already exists")
+                            print("DEBUG: Not enough money to plant a crop OR crop already exists")
                     if sidebar.check_oat_plant_button(mouse_pos): 
                         if self.selected_tile and self.money >= 15 and self.selected_tile.crop is None: 
                             print(f"DEBUG: Planted crop on Tile {self.selected_tile}")
@@ -162,14 +163,16 @@ class Game:
                             self.selected_tile.value = 40 
                             sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
                         else: 
-                            print("Not enough money to plant a crop OR crop already exists")
+                            print("DEBUG: Not enough money to plant a crop OR crop already exists")
+                    if sidebar.check_millet_plant_button(mouse_pos): 
+                        pass 
 
                         
 
             # Clear the screen and draw the grid, sidebar, and selected tile
             self.screen.fill(WHITE)
             grid.draw()  # Draw the grid with tiles
-            sidebar.draw(time_to_next_rent , self.money , rent_cost)  # Draw the sidebar with the selected tile info
+            sidebar.draw(time_to_next_rent , self.money , rent_cost, self.rent_enabled)  # Draw the sidebar with the selected tile info
             money_text = self.font.render(f"Money: £{self.money}", True, GREEN)
             rent_text = self.font.render(f"Rent: £{rent_cost}", True, RED) 
             pygame.display.set_caption(f"Money: {self.money} Farming Game ")
@@ -179,34 +182,89 @@ class Game:
             self.clock.tick(60)  # Limit the frame rate to 60 FPS
         
     def options(self):
-    # Set up a timer to display the message
-        start_time = pygame.time.get_ticks()  # Get the current time in milliseconds
-        display_message = True
+        display_message = True 
 
-        while display_message:
-            self.screen.fill(WHITE)  # Clear the screen
-            options_text = self.font.render("Options will be added soon", True, GREEN)
-            options_rect = options_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-            self.screen.blit(options_text, options_rect)
+        while display_message: 
+            self.screen.fill(WHITE) 
 
-            pygame.display.flip()  # Update the display
+            #Options Text 
+            option_text = self.font.render("OPTIONS MENU", True , GREEN)
+            options_rect = option_text.get_rect(center=(SCREEN_WIDTH // 2 , 100)) 
+            self.screen.blit(option_text, options_rect)
 
-            # Check if 3 seconds have passed
-            current_time = pygame.time.get_ticks()
-            if current_time - start_time > 3000:  # 3000 ms = 3 seconds
-                display_message = False
+            # Rent Toggle Button
+            toggle_text = "Disable Rent" if self.rent_enabled else "Enabled Rent"
+            TOGGLE_BUTTON = Button(image = pygame.image.load("./Assets/Options Rect.png"), pos=(640,250), 
+                                    text_input = toggle_text, font = self.font, base_color=ORANGE, hovering_color='WHITE')
 
-            # Handle events to allow quitting or skipping
+            #Return to main menu button
+            RETURN_BUTTON = Button(image=pygame.image.load("./Assets/Quit Rect.png"), pos=(640, 400),
+                                   text_input= "Return to Main Menu", font = self.font, base_color=ORANGE, hovering_color = WHITE) 
+            
+            #Render Buttons
+            TOGGLE_BUTTON.update(self.screen)
+            RETURN_BUTTON.update(self.screen) 
+
+            pygame.display.flip() 
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    sys.exit() 
+                
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos() 
 
-        # After the message, return to the main menu
-        self.main_menu()#
-    
+                    if TOGGLE_BUTTON.CheckForInput(mouse_pos): 
+                        self.rent_enabled = not self.rent_enabled
+                        toggle_text = "Disable Rent" if self.rent_enabled else "Enable Rent" 
+                    
+                    if RETURN_BUTTON.CheckForInput(mouse_pos):  
+                        self.main_menu() 
+
+                    
     def game_over(self): 
-        pass
+        display_message = True 
+        mouse_pos = pygame.mouse.get_pos() 
+        while display_message: 
+            self.screen.fill(WHITE) 
+ 
+                
+            #Game Over Text
+            game_over_text = self.font.render("GAME OVER", True , GREEN)
+            game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2 , 100)) 
+            self.screen.blit(game_over_text, game_over_rect) 
+            
+            #Return to main menu button 
+            RETURN_BUTTON = Button(image=pygame.image.load("./Assets/Quit Rect.png"), pos=(640, 400),
+                                   text_input= "Return to Main Menu", font = self.font, base_color=ORANGE, hovering_color = WHITE) 
+            
+            #Return to Game Menu Button
+            GAME_BUTTON = Button(image=pygame.image.load("./Assets/Quit Rect.png"),pos= (640, 600), 
+                                 text_input= "Return to Game", font = self.font , base_color=ORANGE, hovering_color = WHITE) 
+            
+            #Render Buttons
+            RETURN_BUTTON.update(self.screen) 
+            GAME_BUTTON.update(self.screen) 
+
+
+            for event in pygame.event.get(): 
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit() 
+                
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos() 
+                    
+                    if RETURN_BUTTON.CheckForInput(mouse_pos): 
+                        self.main_menu() 
+                    
+                    if GAME_BUTTON.CheckForInput(mouse_pos): 
+                        self.play() 
+
+            pygame.display.flip() 
+
+        
 
 if __name__ == '__main__':
     game = Game()

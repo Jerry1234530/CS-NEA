@@ -13,7 +13,7 @@ class Sidebar:
     def update(self, selected_tile): 
         self.selected_tile = selected_tile 
     
-    def draw(self ,time_to_next_rent, money , rent_cost ): 
+    def draw(self ,time_to_next_rent, money , rent_cost , rent_enabled): 
         pygame.draw.rect(self.screen, BLACK, (*self.pos, self.width, self.height))
 
         if self.selected_tile: 
@@ -30,12 +30,18 @@ class Sidebar:
             
 
             #Display Rent Timer
-            if money < rent_cost: 
+            if money < rent_cost and rent_enabled is True:
                 rent_text = self.font.render(f"Rent Timer: {time_to_next_rent}s ", True, RED)
                 self.screen.blit(rent_text, (self.pos[0] + 10, self.pos[1] + 125))
             else:
-                rent_text = self.font.render(f"Rent Timer: {time_to_next_rent}s ", True, GREEN)
-                self.screen.blit(rent_text, (self.pos[0] + 10, self.pos[1] + 125))
+                if rent_enabled is True: 
+                    rent_text = self.font.render(f"Rent Timer: {time_to_next_rent}s ", True, GREEN)
+                    self.screen.blit(rent_text, (self.pos[0] + 10, self.pos[1] + 125))
+            
+            if rent_enabled is False: 
+                rent_text = self.font.render("Rent Disabled", True, (255, 0, 0))
+                self.screen.blit(rent_text, (self.pos[0] + 10, self.pos[1] + 125)) 
+            
             # Draw the sell button
             sell_button_rect = pygame.Rect(self.pos[0] + 10 , self.pos[1] + 150, 100, 40) 
             pygame.draw.rect(self.screen, (150, 0, 0), sell_button_rect) 
@@ -80,3 +86,4 @@ class Sidebar:
     def check_oat_plant_button(self, mouse_pos):
         plant_button_rect = pygame.Rect(self.pos[0] + 10, self.pos[1] + 300, 250, 40)
         return plant_button_rect.collidepoint(mouse_pos)  # Check if mouse is over the plant button
+        
