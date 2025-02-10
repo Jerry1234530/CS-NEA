@@ -22,6 +22,8 @@ class Game:
         self.money = 5 # Set the money 
         self.rent_enabled = True #Default: True. 
 
+#----------------End Of Game Class
+
     def main_menu(self):
         pygame.display.set_caption("Main Menu : Farming Game")
         while True:
@@ -61,6 +63,10 @@ class Game:
 
             pygame.display.update()
 
+#----------------End of Main Menu Loop
+
+
+#----------------Main Game Loop
     def play(self):
         # Initialize the grid and sidebar
         grid = Grid(self.screen)
@@ -164,8 +170,7 @@ class Game:
                             sidebar.update(self.selected_tile)  # Update the sidebar to reflect the planting
                         else: 
                             print("DEBUG: Not enough money to plant a crop OR crop already exists")
-                    if sidebar.check_millet_plant_button(mouse_pos): 
-                        pass 
+
 
                         
 
@@ -174,13 +179,15 @@ class Game:
             grid.draw()  # Draw the grid with tiles
             sidebar.draw(time_to_next_rent , self.money , rent_cost, self.rent_enabled)  # Draw the sidebar with the selected tile info
             money_text = self.font.render(f"Money: £{self.money}", True, GREEN)
-            rent_text = self.font.render(f"Rent: £{rent_cost}", True, RED) 
             pygame.display.set_caption(f"Money: {self.money} Farming Game ")
             self.screen.blit(money_text, (980, 670))  # Display the player's money on the screen
             grid.update() 
             pygame.display.flip()  # Update the display
             self.clock.tick(60)  # Limit the frame rate to 60 FPS
-        
+#-------------------End: Main Game Loop
+
+#-------------------Options Loop
+  
     def options(self):
         display_message = True 
 
@@ -222,7 +229,10 @@ class Game:
                     if RETURN_BUTTON.CheckForInput(mouse_pos):  
                         self.main_menu() 
 
-                    
+#-----------------------End Of Options Loop
+
+#-----------------------Start of game Loop
+
     def game_over(self): 
         display_message = True 
         mouse_pos = pygame.mouse.get_pos() 
