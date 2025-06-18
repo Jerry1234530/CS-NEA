@@ -18,7 +18,7 @@ Plant crops, earn money, and manage your rent before the timer runs out! Each cr
 
 ---
 
-## 🖥The Sidebar
+## The Sidebar
 Displays details for the currently selected tile:
 - **Tile Position** – Coordinates of the selected tile (e.g., (1, 3))
 - **Crop** – Type of crop planted
