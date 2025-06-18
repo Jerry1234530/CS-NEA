@@ -1,25 +1,50 @@
-Computer Science NEA - Python Farming Game 
+# Computer Science NEA – Python Farming Game
 
-The Selected Folder MUST be "CS-NEA MAIN" 
+A tile-based farming simulator developed using **Python and Pygame** for my A Level Computer Science NEA project.
 
-Rent System: 
-The Intital rent is 100. Each Rental cycle will increase the amount of rent needed by 100. 
-If you don't have sufficicnet rental balance, the game will end.
-This system can be disabled within the options subscreen.
+---
 
-The Sidebar: 
+## Gameplay Overview
 
-Tile Position - The position of the selected tile within the grid.
-Crop - The type of crop in which the tile contains
-Progress - The current status of the crop's growth
-Value - The value in which this crop holds
-Rent Timer - A constant countdown that triggers the rental system
-Sell - Sells the current crop within the tile. Must have 100% progress
-Plant (ALL) - Plants the specified crop, The tile must be empty and you have to have sufficient money. 
+Plant crops, earn money, and manage your rent before the timer runs out! Each crop grows over time and can be sold for profit. A recurring **rent timer** forces you to balance growth and income strategically.
 
-Navigation: 
+---
 
-The tiles can be clicked on to select OR you can use the arrow keys on a keyboard to navigate the tiles. 
+## Rent System
+- Initial rent: £100
+- Every rental cycle increases rent by £100
+- If you can't pay, the game ends
+- You can **disable rent** in the Options menu
 
+---
 
-Thanks for checking out this project. 
+## 🖥The Sidebar
+Displays details for the currently selected tile:
+- **Tile Position** – Coordinates of the selected tile (e.g., (1, 3))
+- **Crop** – Type of crop planted
+- **Progress** – Growth percentage (0%–100%)
+- **Value** – Sell value of the crop
+- **Rent Timer** – Time remaining before rent is due
+- **Sell** – Button to sell the crop (must be fully grown)
+- **Plant** – Buttons to plant Wheat, Cotton, Oat, or Melon (if tile is empty and you have enough money)
+
+---
+
+## Controls
+
+**Mouse**:  
+- Click tiles to select  
+- Click sidebar buttons to plant or sell crops
+
+**Keyboard**:  
+- Use arrow keys to move between tiles
+
+---
+
+## Running the Game
+
+1. Make sure Python 3.x is installed
+2. Install Pygame:
+   ```bash
+   pip install pygame
+
