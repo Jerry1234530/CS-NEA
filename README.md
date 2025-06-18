@@ -26,7 +26,7 @@ Displays details for the currently selected tile:
 - **Value** – Sell value of the crop
 - **Rent Timer** – Time remaining before rent is due
 - **Sell** – Button to sell the crop (must be fully grown)
-- **Plant** – Buttons to plant Wheat, Cotton, Oat, or Melon (if tile is empty and you have enough money)
+- **Plant** – Buttons to plant Wheat, Cotton, Oat (if tile is empty and you have enough money)
 
 ---
 
